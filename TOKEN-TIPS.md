@@ -93,6 +93,45 @@ Localização: `~/.claude/skills/writer/references/brand_voice.md`
 
 ---
 
+## Hook de sugestão de modelo (opcional)
+
+O arquivo `shared/model-suggest.sh` é um hook para o Claude Code que detecta qual agente você está chamando e sugere automaticamente o modelo certo antes de você continuar.
+
+### Instalação
+
+```bash
+# 1. Copie o hook
+cp shared/model-suggest.sh ~/.claude/hooks/model-suggest.sh
+chmod +x ~/.claude/hooks/model-suggest.sh
+```
+
+```bash
+# 2. Adicione ao ~/.claude/settings.json
+```
+
+```json
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/model-suggest.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Depois de instalado, toda vez que você digitar `/curator`, `/brief` ou `/pulse`, o Claude exibe:
+> `💡 Este agente roda bem com Haiku (mais barato). Troque antes de continuar: /model claude-haiku-4-5-20251001`
+
+---
+
 ## Resumo rápido
 
 | Situação | O que fazer |
