@@ -31,33 +31,51 @@ Run `/scout` for the first time. It will detect that no brand profile exists and
 
 The profile is saved to `~/.claude/skills/writer/references/brand_voice.md` and used automatically by all agents from that point on.
 
-## Installation
+## Instalação
 
-### Prerequisites
-- [Claude Code](https://claude.ai/code) installed (`npm install -g @anthropic-ai/claude-code`)
-- Anthropic account with API access
+### Pré-requisitos
 
-### Install skills
+1. **Node.js 18+** — [nodejs.org/en/download](https://nodejs.org/en/download)
+2. **Claude Code** — instale via terminal:
+   ```bash
+   npm install -g @anthropic-ai/claude-code
+   ```
+3. **Conta Anthropic** com acesso à API — [console.anthropic.com](https://console.anthropic.com)
 
+### Instalar os skills
+
+**Opção A — via Git (recomendado)**
 ```bash
-# Clone this repo
-git clone <repo-url>
-cd content-pipeline-skills
+# Clone o repositório
+git clone https://github.com/chidekina/content-pipeline-skills.git
 
-# Install each skill
-claude skills install scout
-claude skills install curator
-claude skills install lens
-claude skills install writer
-claude skills install brief
-claude skills install pulse
+# Copie os 6 skills para a pasta de skills do Claude Code
+cp -r content-pipeline-skills/scout   ~/.claude/skills/
+cp -r content-pipeline-skills/curator ~/.claude/skills/
+cp -r content-pipeline-skills/lens    ~/.claude/skills/
+cp -r content-pipeline-skills/writer  ~/.claude/skills/
+cp -r content-pipeline-skills/brief   ~/.claude/skills/
+cp -r content-pipeline-skills/pulse   ~/.claude/skills/
 ```
 
-Or install from zip files (if provided):
+**Opção B — um único comando**
 ```bash
-claude skills install scout.zip
-# repeat for each skill
+git clone https://github.com/chidekina/content-pipeline-skills.git && \
+  for skill in scout curator lens writer brief pulse; do
+    cp -r content-pipeline-skills/$skill ~/.claude/skills/
+  done
 ```
+
+> **Windows (WSL ou Git Bash):** use os mesmos comandos acima.
+> **macOS / Linux:** funciona direto.
+
+### Verificar instalação
+
+Abra o Claude Code e rode:
+```
+/skills
+```
+Você deve ver `scout`, `curator`, `lens`, `writer`, `brief` e `pulse` na lista.
 
 ## Weekly Workflow
 
