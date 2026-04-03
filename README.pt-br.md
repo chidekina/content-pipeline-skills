@@ -58,16 +58,26 @@ cp -r content-pipeline-skills/brief   ~/.claude/skills/
 cp -r content-pipeline-skills/pulse   ~/.claude/skills/
 ```
 
-**Opção B — um único comando**
+**Opção B — um único comando (macOS / Linux / WSL)**
 ```bash
 git clone https://github.com/chidekina/content-pipeline-skills.git && \
-  for skill in scout curator lens writer brief pulse; do
+  for skill in scout curator lens writer brief pulse update-profile; do
     cp -r content-pipeline-skills/$skill ~/.claude/skills/
   done
 ```
 
-> **Windows:** use o WSL (Windows Subsystem for Linux) ou Git Bash com os mesmos comandos acima.
-> **macOS / Linux:** funciona direto no terminal.
+**Opção C — Windows (PowerShell nativo)**
+```powershell
+git clone https://github.com/chidekina/content-pipeline-skills.git
+cd content-pipeline-skills
+foreach ($skill in @("scout","curator","lens","writer","brief","pulse","update-profile")) {
+    Copy-Item -Recurse $skill "$env:USERPROFILE\.claude\skills\"
+}
+```
+
+> **macOS / Linux:** use a Opção A ou B direto no terminal.
+> **Windows CMD/PowerShell:** use a Opção C acima.
+> **Windows com WSL ou Git Bash:** use a Opção B.
 
 ### Verificar instalação
 
