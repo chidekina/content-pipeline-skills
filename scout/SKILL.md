@@ -21,55 +21,47 @@ Before doing anything else, check if `~/.claude/skills/writer/references/brand_v
 
 ## Onboarding Flow (first use only)
 
+**Detect language first:** Look at the language the user wrote in. Conduct the entire onboarding in that same language. If the user wrote in English, use English. If in Portuguese, use Portuguese. If unclear, default to English.
+
 Greet the user warmly and explain what the pipeline does in 2–3 sentences. Then conduct the onboarding interview — ask questions one block at a time, wait for answers before proceeding to the next block. Never dump all questions at once.
 
 ### Block 1 — Identity
-Say: *"Vamos começar pelo básico. Me conta um pouco sobre você e seu conteúdo:"*
-
 Ask:
-1. Qual é o seu nome e arroba nas redes?
-2. Qual é o seu nicho? (ex: finanças pessoais, fitness, marketing, culinária...)
-3. Sendo mais específico ainda — qual é o seu sub-nicho ou diferencial?
+1. What's your name and social handle?
+2. What's your niche? (e.g. personal finance, fitness, marketing, cooking...)
+3. More specifically — what's your sub-niche or differentiator?
 
 Wait for answers.
 
 ### Block 2 — Audience
-Say: *"Agora me conta sobre quem você quer alcançar:"*
-
 Ask:
-1. Quem é o seu público ideal? (idade, perfil, momento de vida)
-2. Qual é a maior dor ou desafio que esse público enfrenta?
-3. O que eles buscam quando te seguem — entretenimento, aprendizado, inspiração, praticidade?
+1. Who is your ideal audience? (age, profile, life stage)
+2. What's the biggest pain or challenge your audience faces?
+3. What do they seek when they follow you — entertainment, learning, inspiration, practical tips?
 
 Wait for answers.
 
 ### Block 3 — Voice & Style
-Say: *"Vamos definir a sua voz:"*
-
 Ask:
-1. Como você descreveria o seu tom? (ex: descontraído e direto / inspiracional / técnico mas acessível)
-2. Você tem frases, expressões ou gírias que são marcas suas?
-3. Existe alguma coisa que você NUNCA quer falar ou um estilo que você quer evitar?
+1. How would you describe your tone? (e.g. casual and direct / inspirational / technical but accessible)
+2. Do you have signature phrases, expressions, or slang that are distinctly yours?
+3. Is there anything you would NEVER say, or a style you want to avoid?
 
 Wait for answers.
 
 ### Block 4 — Platforms & Strategy
-Say: *"Agora a parte prática:"*
-
 Ask:
-1. Quais plataformas você usa? (Instagram Reels, TikTok, YouTube Shorts — ou todas?)
-2. Com que frequência você publica por semana?
-3. Você tem 3 pilares de conteúdo — temas recorrentes que sempre voltam? Quais são?
+1. Which platforms do you use? (Instagram Reels, TikTok, YouTube Shorts — or all?)
+2. How often do you post per week?
+3. Do you have 3 content pillars — recurring themes you always come back to? What are they?
 
 Wait for answers.
 
 ### Block 5 — References & Constraints
-Say: *"Últimas perguntas, prometo 😄"*
-
 Ask:
-1. Tem algum criador que você admira e cujo estilo te inspira?
-2. Tem algum assunto ou tipo de conteúdo polêmico que você prefere evitar?
-3. Você tem parceiros ou patrocinadores que preciso levar em conta?
+1. Is there a creator whose style inspires you?
+2. Are there any controversial topics or content types you'd rather avoid?
+3. Do you have brand partners or sponsors I should factor in?
 
 Wait for answers.
 
@@ -79,7 +71,7 @@ After all blocks are answered:
 2. Save the file to `~/.claude/skills/writer/references/brand_voice.md`
 3. Also copy it to `~/.claude/skills/pulse/references/brand_voice.md`
 
-Confirm: *"✅ Perfil salvo! Agora o pipeline inteiro vai usar sua voz e nicho. Posso começar a buscar as trends da semana?"*
+Confirm: *"✅ Profile saved! The entire pipeline will now use your voice and niche. Ready to search for this week's trends?"*
 
 If yes → proceed to the Process section below.
 

@@ -1,6 +1,6 @@
 # Content Pipeline Skills — Claude Code
 
-Um pipeline completo de marketing de conteúdo construído como skills do Claude Code. Seis agentes que trabalham juntos para descobrir trends, curar, criar roteiros, planejar a semana e melhorar continuamente com base nos dados.
+Um pipeline completo de marketing de conteúdo construído como skills do Claude Code. Sete agentes que trabalham juntos para descobrir trends, curar, criar roteiros, planejar a semana, melhorar continuamente com base nos dados e manter sua voz de marca atualizada.
 
 ## Fluxo do Pipeline
 
@@ -18,6 +18,7 @@ Um pipeline completo de marketing de conteúdo construído como skills do Claude
 | **Writer** | Escreve o roteiro completo e pronto para gravar: hook, desenvolvimento, CTA, texto da thumbnail, lista de B-roll, legenda SEO e comentário fixado. | `/writer` |
 | **Brief** | Consolida todos os roteiros em um calendário editorial priorizado com estimativa de esforço e checklist pré-gravação. | `/brief` |
 | **Pulse** | Review semanal de performance: análise de engajamento, breakdown por ângulo, benchmarking de concorrentes, log histórico e calendário para a próxima semana. Alimenta o Scout com recomendações. | `/pulse` |
+| **Update Profile** | Edita seções específicas do seu perfil de marca (`brand_voice.md`) sem refazer o onboarding completo — útil quando seu nicho, tom ou plataformas mudam. | `/update-profile` |
 
 ## Primeira Vez — Onboarding
 
@@ -113,6 +114,57 @@ Sexta:
 ## Loop de Melhoria Contínua
 
 O Pulse salva recomendações em `~/.claude/skills/pulse/references/last_feedback.md`. O Scout lê esse arquivo em toda execução para calibrar as buscas — o pipeline fica mais inteligente a cada semana com base no que realmente performou.
+
+## Exemplo de Output
+
+**Scout** produz uma tabela de trends assim:
+
+```
+| # | Trend                          | Plataforma(s)         | Sinal | Complexidade | Status Concorrente |
+|---|--------------------------------|-----------------------|-------|--------------|--------------------|
+| 1 | "ferramentas de IA para PMEs"  | YT Shorts, Google     | Alto  | 🟢 Fácil     | ⚠️ Coberto         |
+| 2 | "marmita de R$10 por dia"      | TikTok, Reels         | Alto  | 🟢 Fácil     | ✅ Gap             |
+| 3 | "rotina matinal produtiva"     | YT Shorts, Instagram  | Médio | 🟡 Médio     | 🔴 Saturado        |
+```
+
+**Writer** produz um roteiro completo assim:
+
+```
+## Roteiro — "marmita de R$10" | How-to | Formato: Reels/TikTok
+
+### HOOK (0–3s)
+"Me alimentei a semana toda gastando R$10. Veja como."
+
+### DESENVOLVIMENTO (4–45s)
+- Beat 1: Mostra a nota de R$10. "Esse é o meu orçamento."
+- Beat 2: Lista de compras no mercado [B-roll: corredor do mercado]
+- Beat 3: Montagem do preparo — 3 refeições em 60 segundos [B-roll: tábua, panelas]
+- Beat 4: Reveal final — 7 potes organizados na geladeira
+
+### CTA (últimos 3–5s)
+"Salva esse vídeo pra próxima ida ao mercado. Segue pra mais dicas de economia."
+
+### LEGENDA
+Me alimentei a semana toda com R$10 — e ficou gostoso de verdade.
+
+Lista de compras completa + 3 refeições que você prepara em menos de 1 hora.
+
+#marmita #economizar #comidabarata #preparoderefeicoes #dicasdeeconomia
+```
+
+## Como Atualizar
+
+Quando sair uma nova versão, faça o pull e re-copie os skills:
+
+```bash
+cd content-pipeline-skills
+git pull
+for skill in scout curator lens writer brief pulse update-profile; do
+  cp -r $skill ~/.claude/skills/
+done
+```
+
+Seus arquivos de uso (`brand_voice.md`, `last_feedback.md`, `analytics_log.md`) ficam em `~/.claude/skills/` e nunca são sobrescritos nesse processo.
 
 ## Estrutura de Arquivos
 

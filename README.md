@@ -1,6 +1,6 @@
 # Content Pipeline Skills — Claude Code
 
-A complete content marketing pipeline built as Claude Code skills. Six agents that work together to discover trends, curate, ideate, write scripts, plan the week, and continuously improve through data.
+A complete content marketing pipeline built as Claude Code skills. Seven agents that work together to discover trends, curate, ideate, write scripts, plan the week, continuously improve through data, and keep your brand voice up to date.
 
 ## Pipeline Flow
 
@@ -18,6 +18,7 @@ A complete content marketing pipeline built as Claude Code skills. Six agents th
 | **Writer** | Writes a complete, production-ready script: hook, development, CTA, thumbnail copy, B-roll shot list, SEO caption, and pinned comment. | `/writer` |
 | **Brief** | Consolidates all scripts into a prioritized weekly editorial calendar with effort estimates and a pre-recording checklist. | `/brief` |
 | **Pulse** | Weekly performance review: engagement analysis, angle breakdown, competitor benchmarking, historical analytics log, and editorial calendar for next week. Feeds recommendations back to Scout. | `/pulse` |
+| **Update Profile** | Edits specific sections of your brand voice profile (`brand_voice.md`) without repeating the full onboarding — useful when your niche, tone, or platforms change. | `/update-profile` |
 
 ## First Use — Onboarding
 
@@ -31,51 +32,62 @@ Run `/scout` for the first time. It will detect that no brand profile exists and
 
 The profile is saved to `~/.claude/skills/writer/references/brand_voice.md` and used automatically by all agents from that point on.
 
-## Instalação
+## Installation
 
-### Pré-requisitos
+### Prerequisites
 
 1. **Node.js 18+** — [nodejs.org/en/download](https://nodejs.org/en/download)
-2. **Claude Code** — instale via terminal:
+2. **Claude Code** — install via terminal:
    ```bash
    npm install -g @anthropic-ai/claude-code
    ```
-3. **Conta Anthropic** com acesso à API — [console.anthropic.com](https://console.anthropic.com)
+3. **Anthropic account** with API access — [console.anthropic.com](https://console.anthropic.com)
 
-### Instalar os skills
+### Install the skills
 
-**Opção A — via Git (recomendado)**
+**Option A — via Git (recommended)**
 ```bash
-# Clone o repositório
+# Clone the repository
 git clone https://github.com/chidekina/content-pipeline-skills.git
 
-# Copie os 6 skills para a pasta de skills do Claude Code
-cp -r content-pipeline-skills/scout   ~/.claude/skills/
-cp -r content-pipeline-skills/curator ~/.claude/skills/
-cp -r content-pipeline-skills/lens    ~/.claude/skills/
-cp -r content-pipeline-skills/writer  ~/.claude/skills/
-cp -r content-pipeline-skills/brief   ~/.claude/skills/
-cp -r content-pipeline-skills/pulse   ~/.claude/skills/
+# Copy the 7 skills to Claude Code's skills folder
+cp -r content-pipeline-skills/scout          ~/.claude/skills/
+cp -r content-pipeline-skills/curator        ~/.claude/skills/
+cp -r content-pipeline-skills/lens           ~/.claude/skills/
+cp -r content-pipeline-skills/writer         ~/.claude/skills/
+cp -r content-pipeline-skills/brief          ~/.claude/skills/
+cp -r content-pipeline-skills/pulse          ~/.claude/skills/
+cp -r content-pipeline-skills/update-profile ~/.claude/skills/
 ```
 
-**Opção B — um único comando**
+**Option B — single command (macOS / Linux / WSL)**
 ```bash
 git clone https://github.com/chidekina/content-pipeline-skills.git && \
-  for skill in scout curator lens writer brief pulse; do
+  for skill in scout curator lens writer brief pulse update-profile; do
     cp -r content-pipeline-skills/$skill ~/.claude/skills/
   done
 ```
 
-> **Windows (WSL ou Git Bash):** use os mesmos comandos acima.
-> **macOS / Linux:** funciona direto.
+**Option C — Windows (native PowerShell)**
+```powershell
+git clone https://github.com/chidekina/content-pipeline-skills.git
+cd content-pipeline-skills
+foreach ($skill in @("scout","curator","lens","writer","brief","pulse","update-profile")) {
+    Copy-Item -Recurse $skill "$env:USERPROFILE\.claude\skills\"
+}
+```
 
-### Verificar instalação
+> **macOS / Linux:** use Option A or B directly in the terminal.
+> **Windows CMD/PowerShell:** use Option C above.
+> **Windows with WSL or Git Bash:** use Option B.
 
-Abra o Claude Code e rode:
+### Verify installation
+
+Open Claude Code and run:
 ```
 /skills
 ```
-Você deve ver `scout`, `curator`, `lens`, `writer`, `brief` e `pulse` na lista.
+You should see `scout`, `curator`, `lens`, `writer`, `brief`, `pulse`, and `update-profile` in the list.
 
 ## Weekly Workflow
 
@@ -103,6 +115,57 @@ Friday:
 ## Feedback Loop
 
 Pulse saves recommendations to `~/.claude/skills/pulse/references/last_feedback.md`. Scout reads this file on every run to calibrate searches — meaning the pipeline gets smarter every week based on what actually performed.
+
+## Example Output
+
+**Scout** produces a raw trends table like this:
+
+```
+| # | Trend                        | Platform(s)           | Signal | Complexity | Competitor Status |
+|---|------------------------------|-----------------------|--------|------------|------------------|
+| 1 | "AI tools for small business"| YT Shorts, Google     | High   | 🟢 Easy    | ⚠️ Covered       |
+| 2 | "$5 meal prep challenge"      | TikTok, Reels         | High   | 🟢 Easy    | ✅ Gap           |
+| 3 | "Morning routine productivity"| YT Shorts, Instagram  | Medium | 🟡 Medium  | 🔴 Saturated     |
+```
+
+**Writer** produces a full script like this:
+
+```
+## Script — "$5 meal prep challenge" | How-to | Format: Reels/TikTok
+
+### HOOK (0–3s)
+"I fed myself for an entire week on $5. Here's exactly how."
+
+### DEVELOPMENT (4–45s)
+- Beat 1: Show the $5 bill. "This is my budget."
+- Beat 2: Walk through the grocery list [B-roll: store aisle]
+- Beat 3: Prep montage — 3 meals in 60 seconds [B-roll: cutting board, pots]
+- Beat 4: Final reveal — 7 containers lined up
+
+### CTA (last 3–5s)
+"Save this for your next grocery run. Follow for weekly budget hacks."
+
+### CAPTION
+I fed myself for a week on $5 — and it actually tasted good.
+
+Here's the full grocery list + 3 meals you can prep in under an hour.
+
+#mealprep #budgetmeals #cheaprecipes #moneysaving #healthyonabudget
+```
+
+## How to Update
+
+When a new version is released, pull and re-copy:
+
+```bash
+cd content-pipeline-skills
+git pull
+for skill in scout curator lens writer brief pulse update-profile; do
+  cp -r $skill ~/.claude/skills/
+done
+```
+
+Your runtime files (`brand_voice.md`, `last_feedback.md`, `analytics_log.md`) live in `~/.claude/skills/` and are never overwritten by this process.
 
 ## File Structure
 
