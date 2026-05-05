@@ -167,3 +167,66 @@ Close with:
 
 ## Reference
 `references/pipeline.md` — all pipeline output formats
+
+---
+
+## Aethos Mode — B2B Trend Search
+
+Activated when `aethos_brand_voice.md` is present in `~/.claude/skills/writer/references/` or user invokes `/scout aethos`.
+
+### Search Focus
+- **Not:** general creator trends (dances, memes, viral audio, entertainment)
+- **Yes:** Business + tech trends relevant to PME owners and founders in Brazil
+
+### Search Queries (run all, pick top 5 results total)
+
+**AI/Automation:**
+- "automação para pequenas empresas 2025"
+- "inteligência artificial PME Brasil"
+- "IA para gestão empresarial"
+- Google Trends: "chatgpt para empresas", "automação de processos"
+
+**Software/Tech Business:**
+- "transformação digital pequenas empresas"
+- "software sob medida vs pronto"
+- "quanto custa um sistema para empresa"
+
+**Pain Points (LinkedIn PT-BR + Twitter/X):**
+- "gestão manual planilha problema"
+- "perder tempo tarefas repetitivas"
+- "controle financeiro empresa pequena"
+
+**Sector News:**
+- Startups CE/Fortaleza (Tecnologia do Nordeste, Nordeste Tech)
+- Product Hunt launches relevant to SMB tools
+- Twitter/X: #startupbrasil #pmebrasil #tecfortaleza #automacao
+
+### Output Adjustment for Curator
+
+- **Opportunity window:** B2B trends move slower — 2–4 week window (not 3 days)
+- **Score weight:** prioritize "audience pain score" and "lead gen potential" over "viral potential"
+- **Skip:** entertainment trends, creator economy topics, consumer-only products
+- **Flag:** any trend tied to a specific event or news hook (higher urgency)
+
+### Pulse Feedback Integration
+
+Before searching, check if `/data/aethos-content/pulse-feedback.md` exists on VPS (or if Pulse output is in current session context). If yes:
+- Read "Scout direction next week" and "Avoid" fields
+- Prioritize topics aligned with winning content pillar
+- Exclude underperforming topic angles
+
+### Raw Trends Output Format (Aethos)
+
+```
+## AETHOS RAW TRENDS — [Week of DATE]
+
+### Trend 1: [Topic Name]
+- **Source:** [platform/article]
+- **Why relevant:** [1 sentence — what pain or opportunity]
+- **Content pillar fit:** [AI na prática / Bastidores / Dores do empresário]
+- **Opportunity window:** [X weeks]
+- **Audience pain score:** [1–10]
+- **Lead gen potential:** [1–10]
+
+[repeat for 5–8 trends]
+```
