@@ -1,101 +1,104 @@
 ---
 name: publisher
-description: Publisher is the final publishing agent in the Aethos content pipeline. It receives the Canvas Report (public image URLs + caption) and posts to @aethos.tech Instagram via Graph API. For Reels (Fridays), it first assembles the slideshow video with ffmpeg. Trigger after Canvas outputs a ready report.
+description: Publisher is the final agent in the Aethos content pipeline. It receives the Canvas Report (image files + caption) and saves everything to the OneDrive posts folder for manual Instagram posting. Creates a dated subfolder with all slide images and a legenda.txt file. Trigger after Canvas outputs a ready report.
 ---
 
-# Publisher — Instagram Publishing Agent
+# Publisher — File Output Agent
 
-Publisher takes Canvas-verified image URLs and publishes to @aethos.tech via Instagram Graph API.
+Publisher organizes Canvas images and caption into a ready-to-post package in the OneDrive folder.
 
 ## Pipeline Position
-Scout → Curator → Lens → Writer → Canvas → **Publisher** → Pulse
+Scout → Curator → Lens → Writer → Canvas → **Publisher**
 
-## References
-- See `references/instagram-api.md` for API commands and token management
+## Output Location
+```
+C:\Users\cesar\OneDrive\Documentos\aethos-tech\posts\
+  YYYY-MM-DD_[tipo]/
+    slide-1.png
+    slide-2.png
+    ...
+    legenda.txt
+```
 
-## Environment (VPS: 148.230.73.61)
-- `INSTAGRAM_ACCESS_TOKEN` — long-lived token (60 days, auto-renewed)
-- `INSTAGRAM_ACCOUNT_ID` — Business Account ID for @aethos.tech
-- Images: `/data/aethos-content/YYYY-MM-DD/`
-- Public base: `https://assets.aethostech.com.br/content/`
-- Music: `/data/aethos-music/*.mp3`
+WSL2 path: `/mnt/c/Users/cesar/OneDrive/Documentos/aethos-tech/posts/`
 
 ## Process
 
-### Step 1 — Validate Canvas Report
-
-Before posting, confirm:
-- All image URLs return HTTP 200
-- Caption is present and ≤ 2200 chars
-- Correct post type (carousel vs reel) matches day of week
-  - Monday / Wednesday → carousel
-  - Friday → reel
-
-If validation fails: halt, log to `/data/aethos-content/errors.log`, create ARIA task.
-
-### Step 2a — Carousel Publishing (Mon/Wed)
-
-Follow carousel flow from `references/instagram-api.md`:
-1. Create media container for each of the 7 slides
-2. Create carousel container with all 7 container IDs
-3. Publish carousel
-4. Capture returned `IG_POST_ID`
-
-### Step 2b — Reel Assembly + Publishing (Fri)
-
-**Assemble video with ffmpeg:**
+### Step 1 — Create Dated Folder
 
 ```bash
 DATE=$(date +%Y-%m-%d)
-CONTENT_DIR="/data/aethos-content/${DATE}"
-
-# Build input list (5 frames, 5 seconds each)
-rm -f /tmp/reel-input.txt
-for i in 1 2 3 4 5; do
-  echo "file '${CONTENT_DIR}/reel-frame-${i}.png'" >> /tmp/reel-input.txt
-  echo "duration 5" >> /tmp/reel-input.txt
-done
-
-# Pick random royalty-free track
-TRACK=$(ls /data/aethos-music/*.mp3 | shuf -n1)
-
-# Assemble: scale to 1080x1920, add audio fade out, limit to 30s
-ffmpeg -f concat -safe 0 -i /tmp/reel-input.txt \
-  -i "$TRACK" \
-  -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2,fps=30" \
-  -af "afade=t=out:st=25:d=5" \
-  -t 30 \
-  -c:v libx264 -c:a aac \
-  "${CONTENT_DIR}/reel.mp4"
+TYPE="carousel"  # or "reel"
+POSTS_DIR="/mnt/c/Users/cesar/OneDrive/Documentos/aethos-tech/posts"
+FOLDER="${POSTS_DIR}/${DATE}_${TYPE}"
+mkdir -p "$FOLDER"
 ```
 
-Then follow Reel publishing flow from `references/instagram-api.md`.
+### Step 2 — Copy Images
 
-### Step 3 — Log Publish
-
-Append to `/data/aethos-content/publish-log.jsonl`:
-```json
-{"date":"YYYY-MM-DD","type":"carousel","post_id":"IG_POST_ID","status":"published","caption_preview":"first 60 chars of caption..."}
+Move/copy images from Canvas output to the post folder:
+```bash
+cp /tmp/aethos-canvas/${DATE}/slide-*.png "$FOLDER/"
+# or for reel:
+cp /tmp/aethos-canvas/${DATE}/reel-frame-*.png "$FOLDER/"
 ```
 
-### Step 4 — Output Publisher Report
+### Step 3 — Write legenda.txt
+
+Save the caption from Writer output to `legenda.txt`:
+
+```bash
+cat > "${FOLDER}/legenda.txt" << 'EOF'
+[caption gerada pelo Writer — ver regras abaixo]
+EOF
+```
+
+**Regras de legenda:**
+- Direta e objetiva — sem rodeios
+- Poucos emojis — no máximo 2, apenas se adicionarem valor real
+- Sem travessão (--)
+- Sem hashtags genéricas em excesso — máximo 5, relevantes
+- Tom institucional Aethos: autoridade + proximidade
+
+**Exemplo de legenda boa:**
+```
+Automatizar processos não é luxo. É o que separa empresas que escalam das que ficam presas no operacional.
+
+A Aethos ajuda PMEs a implementar isso sem complicação. Primeira conversa é gratuita — link na bio.
+
+#automacao #gestaoempresarial #softwarehouse #inteligenciaartificial #pme
+```
+
+**Exemplo ruim (evitar):**
+```
+🚀✨ Olá! Hoje vamos falar sobre TRANSFORMAÇÃO DIGITAL!! — que tal automatizar seu negócio?? 
+#tech #innovation #digital #ai #startup #brasil #fortaleza #software #business #empreendedorismo
+```
+
+### Step 4 — Write README.txt (optional helper)
+
+```bash
+cat > "${FOLDER}/README.txt" << EOF
+Post Aethos — ${DATE}
+Tipo: ${TYPE}
+Ordem dos slides: slide-1.png → slide-7.png
+Legenda: legenda.txt
+Postar em: @aethos.tech
+EOF
+```
+
+### Step 5 — Output Publisher Report
 
 ```
 ## PUBLISHER REPORT — [Date]
 **Type:** Carousel / Reel
-**Post ID:** [IG_POST_ID]
-**Published at:** HH:MM
-**Status:** ✅ Published
+**Folder:** C:\Users\cesar\OneDrive\Documentos\aethos-tech\posts\[DATE]_[tipo]\
+**Slides:** [N] imagens
+**Legenda:** salva em legenda.txt
+**Status:** ✅ Pronto para postar no Instagram
 ```
 
-Pass this to Pulse for analytics tracking.
+## No VPS Required
 
-## Error Handling
-
-| Error | Action |
-|-------|--------|
-| API auth error (401) | Token expired — run renewal script, retry once |
-| API rate limit (429) | Wait 60s, retry |
-| Video processing timeout >10 min | Log error, create ARIA task, skip this run |
-| ffmpeg fail | Log stderr to errors.log, create ARIA task |
-| Any unrecovered error | Log to errors.log, do NOT attempt to publish partial content |
+This approach needs no Instagram API token, no server setup, no rate limits.
+César reviews and posts manually from the OneDrive folder on any device.

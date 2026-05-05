@@ -1,14 +1,14 @@
 ---
 name: canvas
-description: Canvas is the image generation agent in the Aethos content pipeline. It receives carousel copy or Reel beat list from Writer and generates slide images via ChatGPT (gpt-image-1 or dall-e-3), then saves them to VPS at /data/aethos-content/YYYY-MM-DD/ and returns public URLs for Publisher. Trigger when Writer outputs an Aethos carousel or Reel script.
+description: Canvas is the image generation agent in the Aethos content pipeline. It receives carousel copy or Reel beat list from Writer and generates slide images via ChatGPT (gpt-image-1 or dall-e-3), then saves them to /tmp/aethos-canvas/YYYY-MM-DD/ for Publisher to move to OneDrive. Trigger when Writer outputs an Aethos carousel or Reel script.
 ---
 
 # Canvas — Image Generation Agent
 
-Canvas transforms Writer's structured copy into visual slide images ready for Instagram publishing.
+Canvas transforms Writer's structured copy into visual slide images ready for Instagram posting.
 
 ## Pipeline Position
-Scout → Curator → Lens → Writer → **Canvas** → Publisher → Pulse
+Scout → Curator → Lens → Writer → **Canvas** → Publisher
 
 ## References
 - Load `shared/aethos-visual-style.md` for brand palette, layout rules, and prompt template
@@ -23,7 +23,7 @@ Identify for each slide/beat:
 - Slide number and role (hook/problem/point/proof/CTA/reel-beat)
 - Headline text
 - Body text
-- Background: dark (#0A1628) or light (#F8FAFC) per visual style guide alternating rule
+- Background: dark (#0A1628) for slides 1, 3, 5, 7 — light (#F8FAFC) for slides 2, 4, 6
 
 ### Step 2 — Build Image Prompts
 
@@ -41,10 +41,10 @@ Aethos logo placeholder bottom-right corner.
 Format: 1024x1024px square (Instagram carousel).
 ```
 
-For Reel frames — same template but:
-- Always dark background
-- Replace carousel role with: `Reel frame [N] of 5`
-- Format: `1080x1920px vertical (Instagram Reel)`
+For Reel frames:
+- Always dark background (#0A1628)
+- Role: `Reel frame [N] of 5`
+- Format: `1024x1792px vertical (Instagram Reel)`
 
 ### Step 3 — Generate Images via ChatGPT
 
@@ -53,58 +53,42 @@ Call OpenAI image generation for each slide/frame:
 - Size: `1024x1024` for carousel, `1024x1792` for Reel frames
 - Quality: `standard`
 
-Save each image to VPS directory:
-```
-/data/aethos-content/YYYY-MM-DD/slide-N.png    (carousel)
-/data/aethos-content/YYYY-MM-DD/reel-frame-N.png  (Reel)
-```
-
-Public URL base: `https://assets.aethostech.com.br/content/YYYY-MM-DD/`
-
-### Step 4 — Verify Public URLs
-
-After saving, verify each image is publicly accessible:
+Save to temp directory:
 ```bash
-curl -I https://assets.aethostech.com.br/content/YYYY-MM-DD/slide-N.png
-# Expected: HTTP 200
+DATE=$(date +%Y-%m-%d)
+mkdir -p /tmp/aethos-canvas/${DATE}
+# Save each image as:
+# /tmp/aethos-canvas/${DATE}/slide-N.png  (carousel)
+# /tmp/aethos-canvas/${DATE}/reel-frame-N.png  (reel)
 ```
 
-If any URL returns non-200: retry generation once with a simplified prompt (remove some style constraints). If still failing: use ImageMagick fallback — solid color background + text overlay.
+### Step 4 — Verify Images
 
-### Step 5 — Log Costs
-
-Append to `/data/aethos-content/costs.log`:
+Check each file exists and is non-empty:
+```bash
+for f in /tmp/aethos-canvas/${DATE}/slide-*.png; do
+  [ -s "$f" ] && echo "✅ $f" || echo "❌ MISSING: $f"
+done
 ```
-YYYY-MM-DD | carousel | 7 images | ~$0.56
-YYYY-MM-DD | reel | 5 images | ~$0.40
-```
-(Estimate: ~$0.08/image standard quality)
 
-### Step 6 — Output Canvas Report
+If any image missing: retry once with simplified prompt. If still failing: flag to user — do not pass broken set to Publisher.
+
+### Step 5 — Output Canvas Report
 
 ```
 ## CANVAS REPORT — [Date]
 **Post type:** Carousel / Reel
-**Slides generated:** 7 / Frames generated: 5
-**Public URLs:**
-- Slide 1: https://assets.aethostech.com.br/content/YYYY-MM-DD/slide-1.png
-- Slide 2: https://assets.aethostech.com.br/content/YYYY-MM-DD/slide-2.png
-- Slide 3: https://assets.aethostech.com.br/content/YYYY-MM-DD/slide-3.png
-- Slide 4: https://assets.aethostech.com.br/content/YYYY-MM-DD/slide-4.png
-- Slide 5: https://assets.aethostech.com.br/content/YYYY-MM-DD/slide-5.png
-- Slide 6: https://assets.aethostech.com.br/content/YYYY-MM-DD/slide-6.png
-- Slide 7: https://assets.aethostech.com.br/content/YYYY-MM-DD/slide-7.png
-**Caption:** [full caption from Writer output]
+**Slides generated:** 7
+**Temp path:** /tmp/aethos-canvas/[DATE]/
+**Files:**
+- slide-1.png ✅
+- slide-2.png ✅
+[...]
 **Status:** ✅ Ready for Publisher
 ```
 
-Pass this report directly to Publisher.
+Pass this report to Publisher.
 
-## Error Handling
-
-| Error | Action |
-|-------|--------|
-| Image gen API error | Retry once after 10s with simplified prompt |
-| URL returns non-200 after retry | ImageMagick text fallback |
-| VPS unreachable | Log error, alert via ARIA task creation |
-| Cost spike (>$5 single run) | Halt and alert — do not publish |
+## Cost Estimate
+~$0.08/image × 7 slides = ~$0.56 per carousel post
+~$0.08/image × 5 frames = ~$0.40 per reel post

@@ -32,6 +32,14 @@
 - "Revolucionamos" / "disruptamos"
 - Anglicismos desnecessários quando existe termo em PT-BR
 
+## Caption Rules (Instagram)
+- Direta — vai ao ponto, sem rodeios
+- Emojis: máximo 2, só se adicionarem valor real. Nunca decorativos.
+- Sem travessão (--) — nunca usar
+- Hashtags: máximo 5, sempre relevantes ao tema
+- Sem palavras de enchimento: "incrível", "revolucionário", "disruptivo"
+- Tom: autoridade + proximidade. Não frio, não animado demais.
+
 ## CTA Patterns (lead gen focused)
 - "Fale com a gente pelo link na bio."
 - "Manda uma mensagem — a primeira conversa é gratuita."
