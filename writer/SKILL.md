@@ -98,3 +98,109 @@ Close with:
 
 ## Reference
 `references/pipeline.md` — all pipeline output formats
+
+---
+
+## Aethos Mode — Carousel & Reel (B2B Institutional)
+
+Activated when brand_voice file is `aethos_brand_voice.md` or user invokes `/writer aethos`.
+
+Load `~/.claude/skills/writer/references/aethos_brand_voice.md` for tone and CTA rules.
+Load `shared/aethos-visual-style.md` for layout rules.
+
+### Carousel Output (Mon/Wed)
+
+Generate 7 slides following this structure:
+
+**SLIDE 1 — HOOK**
+- Bold question or counterintuitive claim (max 8 words headline)
+- Subtext: 1 sentence expanding the hook (max 15 words)
+- Goal: stop the scroll
+
+**SLIDE 2 — PROBLEM**
+- Name the pain the PME/founder feels
+- "Se você [situação]..." framing
+
+**SLIDES 3–5 — POINTS (numbered)**
+- One concrete insight per slide
+- Max 20 words each
+- Use data or specific example when possible
+
+**SLIDE 6 — PROOF**
+- Mini-case or stat: "Um cliente da Aethos reduziu X em Y%"
+- Or: relevant market data with source
+
+**SLIDE 7 — CTA**
+- Single action from brand voice CTA patterns
+- Default: "Fale com a gente pelo link na bio."
+
+**Output format:**
+
+```
+## CAROUSEL — [Trend/Topic]
+**Caption:** [caption PT-BR, 150–200 chars, 5 hashtags from brand voice hashtag set]
+
+### Slide 1 — Hook
+**Headline:** [text]
+**Body:** [text]
+
+### Slide 2 — Problem
+**Headline:** [text]
+**Body:** [text]
+
+### Slide 3 — Point 1
+**Headline:** [text]
+**Body:** [text]
+
+### Slide 4 — Point 2
+**Headline:** [text]
+**Body:** [text]
+
+### Slide 5 — Point 3
+**Headline:** [text]
+**Body:** [text]
+
+### Slide 6 — Proof
+**Headline:** [text]
+**Body:** [text]
+
+### Slide 7 — CTA
+**Headline:** [text]
+**Body:** [text]
+```
+
+### Reel Output (Fri)
+
+Script adapted for slideshow (no talking head required).
+Canvas will generate one image per beat.
+
+- **Duration:** 20–30 seconds
+- **Structure:** Hook (0–3s) → 3 points (5s each) → CTA (5s)
+- **Each beat:** text shown on screen as overlay + visual description for Canvas
+
+**Output format:**
+
+```
+## REEL — [Trend/Topic]
+**Caption:** [caption PT-BR, 150–200 chars, 5 hashtags]
+
+### Beat 1 — Hook (0–3s)
+[TEXT OVERLAY]: [text max 8 words]
+[VISUAL]: [description for Canvas image gen]
+
+### Beat 2 — Point 1 (3–8s)
+[TEXT OVERLAY]: [text]
+[VISUAL]: [description]
+
+### Beat 3 — Point 2 (8–13s)
+[TEXT OVERLAY]: [text]
+[VISUAL]: [description]
+
+### Beat 4 — Point 3 (13–18s)
+[TEXT OVERLAY]: [text]
+[VISUAL]: [description]
+
+### Beat 5 — CTA (18–23s)
+[TEXT OVERLAY]: [text — single action]
+[VISUAL]: [description]
+```
