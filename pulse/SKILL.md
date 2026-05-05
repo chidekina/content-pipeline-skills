@@ -125,3 +125,104 @@ Close with:
 
 ## Reference
 `references/pipeline.md` — all pipeline output formats
+
+---
+
+## Aethos Mode — Instagram Insights Analysis
+
+Activated when `aethos_brand_voice.md` is present or user invokes `/pulse aethos`.
+
+## Pipeline Position (Aethos)
+Scout → Curator → Lens → Writer → Canvas → Publisher → **Pulse** → Scout (next cycle)
+
+### Step 1 — Load Published Posts
+
+Read from publish log: `/data/aethos-content/publish-log.jsonl`
+
+Filter last 3 published posts. For each, extract:
+- `post_id` — needed for Insights API
+- `date`, `type` (carousel/reel), `caption_preview`
+
+### Step 2 — Fetch Instagram Insights
+
+For each post, call:
+```bash
+curl "https://graph.facebook.com/v19.0/${POST_ID}/insights?\
+metric=reach,impressions,saved,shares,comments_count,likes\
+&access_token=${INSTAGRAM_ACCESS_TOKEN}"
+```
+
+Also fetch profile-level metrics:
+```bash
+curl "https://graph.facebook.com/v19.0/${INSTAGRAM_ACCOUNT_ID}/insights?\
+metric=profile_views,website_clicks\
+&period=day\
+&access_token=${INSTAGRAM_ACCESS_TOKEN}"
+```
+
+### Step 3 — Score Each Post
+
+| Metric | Weight | Good | Great |
+|--------|--------|------|-------|
+| Reach | 30% | >500 | >2000 |
+| Saves | 30% | >5% of reach | >10% of reach |
+| Profile visits | 20% | >3% of reach | >8% of reach |
+| Shares | 10% | >1% of reach | >3% of reach |
+| Comments | 10% | >0.5% of reach | >2% of reach |
+
+Score each post 1–10. Note which content pillar it belongs to (from caption keywords).
+
+### Step 4 — Identify Patterns
+
+Compare the 3 posts:
+- Which content pillar scored highest?
+- Which format (carousel vs reel) had better saves?
+- Which hook style drove more profile visits?
+- What topics underperformed?
+
+### Step 5 — Write Pulse Feedback File
+
+Save to `/data/aethos-content/pulse-feedback.md`:
+
+```markdown
+# Pulse Feedback — [Week]
+Generated: [YYYY-MM-DD]
+
+## Performance Summary
+| Post | Date | Type | Pillar | Score |
+|------|------|------|--------|-------|
+| [topic] | [date] | carousel | AI na prática | 7.2 |
+| [topic] | [date] | carousel | Dores do empresário | 8.5 |
+| [topic] | [date] | reel | Bastidores | 5.1 |
+
+## Top Performer
+**Post:** [topic]
+**Why:** [saves rate / profile visits / shares — 1 sentence]
+
+## Underperformer
+**Post:** [topic]
+**Why:** [low reach / no saves — 1 sentence]
+
+## Content Pillar Winning This Week
+**Pillar:** [name]
+
+## Scout Direction Next Week
+[Specific topic angle to double down on — 1–2 sentences]
+
+## Avoid Next Week
+[Topic or format that underperformed — 1 sentence]
+```
+
+### Step 6 — Output Pulse Report
+
+```
+## PULSE REPORT — [Week]
+**Posts analyzed:** 3
+**Top performer:** [topic] — score [X.X]
+**Winning pillar:** [pillar name]
+**Scout direction:** [1 sentence]
+**Feedback saved to:** /data/aethos-content/pulse-feedback.md
+**Status:** ✅ Scout ready for next cycle
+```
+
+Scout reads `pulse-feedback.md` at the start of the next run.
