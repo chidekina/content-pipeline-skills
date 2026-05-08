@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//home/hidekina/.claude/hooks/**)",
+      "Read(//home/hidekina/.mcp-servers/aria-mcp/src/**)",
+      "Read(//home/hidekina/.mcp-servers/aria-mcp/**)",
+      "Bash(grep -h \"name:\" ~/.mcp-servers/aria-mcp/src/tools/*.ts)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Read(//home/hidekina/.claude/skills/**)",
+      "Read(//home/hidekina/.claude/skills/writer/references/**)",
+      "Bash(SDD_SKIP=1 git add docs/plans/2026-05-05-aethos-instagram-pipeline-impl.md)",
+      "Bash(SDD_SKIP=1 git commit -m \"docs: add Aethos Instagram pipeline implementation plan\")",
+      "Bash(cp ~/.claude/skills/writer/references/aethos_brand_voice.md /home/hidekina/projetos/content-pipeline-skills/writer/references/)",
+      "Bash(cp ~/.claude/skills/pulse/references/aethos_brand_voice.md /home/hidekina/projetos/content-pipeline-skills/pulse/references/)",
+      "Bash(git -C /home/hidekina/projetos/content-pipeline-skills log --oneline -3)",
+      "Bash(git *)",
+      "Bash(chmod +x /home/hidekina/projetos/content-pipeline-skills/scripts/vps-setup.sh)",
+      "Bash(chmod +x /home/hidekina/projetos/content-pipeline-skills/scripts/run-pipeline-aethos.sh /home/hidekina/projetos/content-pipeline-skills/scripts/setup-cron.sh)",
+      "Bash(bash *)",
+      "Bash(cp -r canvas ~/.claude/skills/)",
+      "Bash(cp -r publisher ~/.claude/skills/)",
+      "Bash(cp writer/SKILL.md ~/.claude/skills/writer/SKILL.md)",
+      "Bash(cp scout/SKILL.md ~/.claude/skills/scout/SKILL.md)",
+      "Bash(cp pulse/SKILL.md ~/.claude/skills/pulse/SKILL.md)",
+      "Bash(cp publisher/SKILL.md ~/.claude/skills/publisher/SKILL.md)",
+      "Bash(cp canvas/SKILL.md ~/.claude/skills/canvas/SKILL.md)",
+      "Bash(cp writer/references/aethos_brand_voice.md ~/.claude/skills/writer/references/aethos_brand_voice.md)",
+      "Bash(cp writer/references/aethos_brand_voice.md ~/.claude/skills/pulse/references/aethos_brand_voice.md)",
+      "WebSearch",
+      "Bash(cp /home/hidekina/projetos/content-pipeline-skills/writer/references/aethos_brand_voice.md /home/hidekina/.claude/skills/writer/references/aethos_brand_voice.md)",
+      "Bash(cp /home/hidekina/projetos/content-pipeline-skills/pulse/references/aethos_brand_voice.md /home/hidekina/.claude/skills/pulse/references/aethos_brand_voice.md)"
+    ]
+  }
+}

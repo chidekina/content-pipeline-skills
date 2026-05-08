@@ -5,6 +5,33 @@ Scout → Curator → Lens → Writer → Brief → [Human records] → Pulse �
 
 ---
 
+## Weekly Brand Rotation
+
+Cada semana tem foco em um contexto. Rotação fixa:
+
+| Semana | Foco | Cor acento | Tipo de conteúdo |
+|--------|------|-----------|-----------------|
+| Ímpar A | **Aethos** | Vermelho `#D62828` | Institucional, bastidores, empresa |
+| Par | **Menthos** | Verde `#00C46A` | Produto — gestão de projetos com AI |
+| Ímpar B | **Aethos** | Vermelho `#D62828` | Institucional, bastidores, empresa |
+| Par seguinte | **Nexio** | Índigo `#6366F1` | Produto — links inteligentes e tracking |
+
+Padrão: **Aethos → Menthos → Aethos → Nexio → Aethos → Menthos → ...**
+
+### Como determinar a semana atual
+- Scout e Brief devem identificar qual marca é o foco antes de pesquisar/planejar
+- Semana começa na segunda-feira
+- Semana 1 do ano = Aethos. Semanas ímpares = Aethos. Semanas pares alternam Menthos/Nexio
+
+### Impacto no pipeline
+- **Scout:** pesquisar tendências alinhadas ao produto/contexto da semana
+- **Curator:** priorizar conteúdo que encaixa na marca da semana
+- **Writer:** usar tom e ângulos do produto específico (ver brand_voice.md)
+- **Brief:** indicar marca e cor acento da semana no plano editorial
+- **Pulse:** separar métricas por contexto de marca para análise comparativa
+
+---
+
 ## Output Format: Scout Report
 
 ```
@@ -182,9 +209,9 @@ TEXT: "[max 4 words, high contrast]" | VISUAL: [face expression, prop, backgroun
 ### Prioritized Calendar
 | # | Day  | Time | Platform | Trend (hook)  | Angle       | Effort   | Status       |
 |---|------|------|----------|---------------|-------------|----------|--------------|
-| 1 | Ter  | 19h  | Reels    | [hook]        | Educational | 🟢 30min | ⬜ To record |
-| 2 | Qui  | 19h  | TikTok   | [hook]        | Hot Take    | 🟡 1h    | ⬜ To record |
-| 3 | Sáb  | 20h  | Shorts   | [hook]        | How-to      | 🟢 45min | ⬜ To record |
+| 1 | Tue  | 7pm  | Reels    | [hook]        | Educational | 🟢 30min | ⬜ To record |
+| 2 | Thu  | 7pm  | TikTok   | [hook]        | Hot Take    | 🟡 1h    | ⬜ To record |
+| 3 | Sat  | 8pm  | Shorts   | [hook]        | How-to      | 🟢 45min | ⬜ To record |
 
 ### Pre-Recording Checklist
 - [ ] Scripts reviewed and approved

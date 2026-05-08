@@ -38,6 +38,35 @@
 - "Quer saber como isso se aplica ao seu negócio? Comenta abaixo."
 - "Salva esse post — você vai precisar."
 
+## Visual Identity
+
+### Base (todos os posts)
+| Nome | Hex | Uso |
+|------|-----|-----|
+| Preto | `#0A0A0A` | Fundo principal |
+| Branco | `#F5F5F5` | Texto, fundo claro |
+| Cinza escuro | `#1A1A1A` | Fundo secundário/cards |
+| Cinza claro | `#A0A0A0` | Texto secundário |
+
+### Sistema de Cores por Tipo de Conteúdo
+Preto e branco dominantes. Uma cor como detalhe identifica o contexto:
+
+| Contexto | Cor acento | Hex | Quando usar |
+|----------|-----------|-----|-------------|
+| **Aethos** (institucional, bastidores, empresa) | Vermelho | `#D62828` | Posts sobre a Aethos como negócio |
+| **Menthos** (produto — gestão de projetos AI) | Verde esmeralda | `#00C46A` | Posts sobre o Menthos |
+| **Nexio** (produto — links e tracking) | Índigo | `#6366F1` | Posts sobre o Nexio |
+
+### Regras de Cor (Instagram)
+- Fundo dominante: sempre preto `#0A0A0A` ou branco `#F5F5F5`
+- Acento: máximo 1 cor por post, só para detalhe/destaque/CTA
+- Nunca usar cor acento como fundo dominante
+- Separação visual clara entre os 3 contextos — audiência deve reconhecer o produto pelo detalhe de cor
+
+## Produtos Aethos
+- **Menthos** — plataforma de gestão de projetos com AI. Acento: verde `#00C46A`
+- **Nexio** — plataforma de links inteligentes e tracking de campanhas. Acento: índigo `#6366F1`
+
 ## Hashtag Set (rotate weekly)
 Primary: #automacao #inteligenciaartificial #softwarehouse #desenvolvimentoweb
 Secondary: #gestaoempresarial #pme #tecnologia #fortaleza #transformacaodigital
